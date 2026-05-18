@@ -89,7 +89,7 @@ await asyncTask('Checking versions', async ({ log, warn, fail }) => {
 		fail('Invalid tagged version');
 		process.exit(1);
 	}
-	if (semver.lt(taggedVersion, npmPackageVersion)) {
+	if (npmPackageVersion && semver.lt(taggedVersion, npmPackageVersion)) {
 		warn('Version in the git repository is lower than the version in npm, no publishing required');
 		process.exit(1);
 	}

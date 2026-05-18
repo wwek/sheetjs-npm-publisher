@@ -81,12 +81,12 @@ await asyncTask('Getting a package version from the npm registry', async ({ log,
 });
 
 await asyncTask('Checking versions', async ({ log, warn, fail }) => {
-	if (taggedVersion === npmPackageVersion) {
+	if (npmPackageVersion && taggedVersion === npmPackageVersion) {
 		log('Versions are the same, no publishing required');
 		process.exit(1);
 	}
-	if (!taggedVersion || !npmPackageVersion) {
-		fail('One of the versions is invalid');
+	if (!taggedVersion) {
+		fail('Invalid tagged version');
 		process.exit(1);
 	}
 	if (semver.lt(taggedVersion, npmPackageVersion)) {

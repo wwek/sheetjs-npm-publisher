@@ -7,11 +7,11 @@ import ora from 'ora';
 import semver from 'semver';
 import { simpleGit } from 'simple-git';
 
-const REPOSITORY_URL = 'https://github.com/e965/sheetjs-npm-publisher';
+const REPOSITORY_URL = 'https://github.com/wwek/sheetjs-npm-publisher';
 const README_FILE = 'README.md';
 const LOCAL_README_PATH = path.join(process.cwd(), README_FILE);
 
-const NPM_PACKAGE_NAME = '@e965/xlsx';
+const NPM_PACKAGE_NAME = '@wwek/xlsx';
 const NPM_REGISTRY_URL = 'https://registry.npmjs.org';
 const NPM_PACKAGE_REGISTRY_URL = new URL(NPM_PACKAGE_NAME, NPM_REGISTRY_URL).href;
 

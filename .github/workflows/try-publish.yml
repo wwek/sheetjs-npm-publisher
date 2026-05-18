@@ -56,4 +56,4 @@ jobs:
         working-directory: sheetjs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-        run: npm publish --access public ${{ github.event.inputs.force == 'true' && '--force' || '' }}
+        run: npm publish --access public

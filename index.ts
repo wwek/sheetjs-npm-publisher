@@ -127,6 +127,11 @@ await asyncTask('Patching a package.json file in project', async () => {
 	gitPackage.name = NPM_PACKAGE_NAME;
 	gitPackage.repository.url = REPOSITORY_URL;
 
+	if (forcePublish) {
+		const original = gitPackage.version;
+		gitPackage.version = `${original}-patch.0`;
+	}
+
 	const newFileContent = JSON.stringify(gitPackage, null, 2);
 	await fs.rm(SHEETJS_PACKAGE_PATH, { force: true, recursive: true });
 	await fs.writeFile(SHEETJS_PACKAGE_PATH, newFileContent, 'utf-8');

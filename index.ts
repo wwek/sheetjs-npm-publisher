@@ -26,6 +26,8 @@ let latestTagName: string | null = null;
 let taggedVersion: string | null = null;
 let npmPackageVersion: string | null = null;
 
+const forcePublish = process.env.FORCE_PUBLISH === 'true';
+
 type Logger = (text: string) => void;
 type Task = (context: { log: Logger; warn: Logger; fail: Logger }) => Promise<void>;
 const asyncTask = async (title: string, task: Task) => {
@@ -81,16 +83,20 @@ await asyncTask('Getting a package version from the npm registry', async ({ log,
 });
 
 await asyncTask('Checking versions', async ({ log, warn, fail }) => {
-	if (npmPackageVersion && taggedVersion === npmPackageVersion) {
-		log('Versions are the same, no publishing required');
-		process.exit(1);
+	if (forcePublish) {
+		log('Force publish enabled, skipping version checks');
+	} else {
+		if (npmPackageVersion && taggedVersion === npmPackageVersion) {
+			log('Versions are the same, no publishing required');
+			process.exit(1);
+		}
+		if (npmPackageVersion && semver.lt(taggedVersion, npmPackageVersion)) {
+			warn('Version in the git repository is lower than the version in npm, no publishing required');
+			process.exit(1);
+		}
 	}
 	if (!taggedVersion) {
 		fail('Invalid tagged version');
-		process.exit(1);
-	}
-	if (npmPackageVersion && semver.lt(taggedVersion, npmPackageVersion)) {
-		warn('Version in the git repository is lower than the version in npm, no publishing required');
 		process.exit(1);
 	}
 	log('Passed');

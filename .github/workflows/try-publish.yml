@@ -2,6 +2,15 @@ name: Trying to publish
 
 on:
   workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force publish (overwrite same version, e.g. to update README)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
   schedule:
     - cron: '0 0 * * *'
 
@@ -37,6 +46,8 @@ jobs:
 
       - name: Patching
         id: patching
+        env:
+          FORCE_PUBLISH: ${{ github.event.inputs.force || 'false' }}
         run: npm start
         continue-on-error: true
 
@@ -45,4 +56,4 @@ jobs:
         working-directory: sheetjs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-        run: npm publish --access public
+        run: npm publish --access public ${{ github.event.inputs.force == 'true' && '--force' || '' }}
